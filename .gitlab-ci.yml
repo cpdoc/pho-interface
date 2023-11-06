@@ -1,0 +1,8 @@
+image: node:lts
+
+pages:
+  script:
+    - echo "building"
+  artifacts:
+    paths:
+      - public
