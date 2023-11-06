@@ -216,6 +216,7 @@ watch(
               {{ filterLength }} ocorrência{{ filterLength === 1 ? "" : "s" }}
             </span>
           </div>
+          <!--
           <n-dropdown
             trigger="click"
             :options="optionsLegend"
@@ -229,7 +230,8 @@ watch(
                 />
               </template>
             </n-button>
-          </n-dropdown>
+            </n-dropdown>
+          -->
         </div>
       </div>
     </div>
