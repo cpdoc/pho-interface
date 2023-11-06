@@ -1,40 +1,20 @@
-<script setup lang="ts">
-import { NInputNumber } from 'naive-ui'
-import { useStore } from 'vuex'
-import { computed } from 'vue'
-import { useMeta } from 'vue-meta'
+ <script setup lang="ts">
+import { ref } from 'vue'
+import { NSelect } from 'naive-ui'
 
-const store = useStore()
+import DocumentView from './components/DocumentView.vue'
+import data from './data.json'
 
-const value = computed({
-    get() {
-       return store.state.count
-    },
-    set(value) {
-      store.commit("increment", value)
-    }
-})
+const options = Object.keys(data).map(el => { return { label: el, value: el } })
 
-useMeta({
-  title: 'Projeto vue',
-  description: 'Conheça mais sobre o projeto',
-  htmlAttrs: { lang: 'pt-br', amp: true }
-})
-
-const siteName = "Projeto Vue"
+const selected = ref(null)
 </script>
 
 <template>
-  <metainfo>
-    <template v-slot:title="{ content }">
-      {{ content ? `${content} | ${siteName}` : siteName }}
-    </template>
-  </metainfo>
-  <section class="m-12">
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="mt-2 w-[250px]">
-      <n-input-number v-model:value="value" clearable />
+  <section class="border m-2 min-h-[568px] shadow-lg">
+    <div class="mx-4 mt-4 flex w-[250px]">
+      <n-select v-model:value="selected" :options="options" placeholder="Selecione uma entrevista" clearable />
     </div>
+    <DocumentView v-if="selected" :data="data[selected]" />
   </section>
 </template>

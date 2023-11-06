@@ -4,7 +4,7 @@ FROM node:20-alpine
 RUN apk update && apk add bash
 
 # Update npm to the latest version
-RUN npm install -g npm@^10.0.0
+RUN npm install -g npm@^10.2.0
 
 WORKDIR /srv/app
 COPY package.json package-lock.json /srv/app/
