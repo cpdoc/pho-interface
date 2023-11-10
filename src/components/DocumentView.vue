@@ -109,8 +109,15 @@ const downloadText = () => {
 </script>
 
 <template>
+  <section class="dark:bg-gray-900 flex flex-col sm:flex-row gap-3 py-8 mx-4">
+    <div class="flex flex-col space-y-8">
+      <p>
+        {{data.summary}}
+      </p>
+    </div>
+  </section>
   <section
-    class="dark:bg-gray-900 flex flex-col xl:flex-row gap-3 py-8 mx-4"
+    class="dark:bg-gray-900 flex flex-col sm:flex-row gap-3 py-8 mx-4"
   >
     <iframe
       v-if="
@@ -208,6 +215,5 @@ const downloadText = () => {
       :downloadText="downloadText"
     />
   </section>
-  <p>{{data.summary}}</p>
 </template>
 
