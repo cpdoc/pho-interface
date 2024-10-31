@@ -11,7 +11,10 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Runtime data
+old-public
 public/data
+public/assets
+public/index.html
 pids
 *.pid
 *.seed

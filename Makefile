@@ -7,8 +7,8 @@ help:		## List all make commands
 build:
 	docker compose build
 
-bundle:		## Run npm build to bundle final
-	docker compose run --rm web rm -rf dist/
+bundle: build install		## Run npm build to bundle final
+	rm -rf dist
 	docker compose run --rm web npm run build
 
 clean: stop	## Stop and remove containers and node_modules
