@@ -18,9 +18,11 @@ async function loadIndex() {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const data = await response.json()
-    index.value = data
-    options.value = Object.entries(data).map(([key, data]) => ({
-      label: data.label,
+    // Garantir que o data é do tipo InterviewIndex
+    const indexData = data as InterviewIndex
+    index.value = indexData
+    options.value = Object.entries(indexData).map(([key, entryData]) => ({
+      label: entryData.label,
       value: key
     }))
   } catch (error) {
