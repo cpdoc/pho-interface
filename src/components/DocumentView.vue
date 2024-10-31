@@ -8,7 +8,7 @@ const props = defineProps<{ data: { [key: string]: any } }>()
 const emit = defineEmits(['videoReady'])
 
 const mediaElement: Ref = ref(null)
-const transcriptionSearch: Ref = ref(null)
+const transcriptionSearch: Ref<string> = ref('')
 const isTranscriptionReady: Ref<boolean> = ref(false)
 const isPlayerReady: Ref<boolean> = ref(false)
 
