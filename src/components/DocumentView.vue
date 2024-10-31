@@ -1,26 +1,27 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { ref } from "vue"
 import type { Ref } from "vue"
 import Transcription from "./Transcription.vue"
 import Text from "./Text.vue"
 
 const props = defineProps<{ data: { [key: string]: any } }>()
+const emit = defineEmits(['videoReady'])
 
-const mediaElement: Ref = ref(null);
+const mediaElement: Ref = ref(null)
 const transcriptionSearch: Ref = ref(null)
-
-watch(
-  () => transcriptionSearch.value,
-  (transcription) => {
-    // Transcription text could be used to set path route with value searched
-    console.log(transcription)
-  }
-);
+const isTranscriptionReady: Ref<boolean> = ref(false)
+const isPlayerReady: Ref<boolean> = ref(false)
 
 const setMediaEventListeners = (scrollToLegend: Function) => {
   if (!props.data.transcription) {
+    isTranscriptionReady.value = true
+    checkAllReady()
     return
   }
+
+  // Marcar que a transcrição está pronta
+  isTranscriptionReady.value = true
+  checkAllReady()
 
   if (
     ["mp4", "mkv", "mp3", "ogg", "bitchute"].includes(
@@ -30,7 +31,6 @@ const setMediaEventListeners = (scrollToLegend: Function) => {
     mediaElement.value.play().catch(() => {
       // Do nothing
     })
-    // TODO: verify if we have to remove listeners on component umount
     mediaElement.value.addEventListener("timeupdate", () => {
       if (mediaElement.value && mediaElement.value.currentTime) {
         scrollToLegend(mediaElement.value.currentTime)
@@ -41,34 +41,44 @@ const setMediaEventListeners = (scrollToLegend: Function) => {
         scrollToLegend(Math.floor(mediaElement.value.currentTime), true)
       }
     })
+
+    mediaElement.value.addEventListener("loadeddata", () => {
+      isPlayerReady.value = true
+      checkAllReady()
+    })
   } else if (props.data.source === "youtube") {
     let previousTime = 0
     let previousAction = 0
     window.addEventListener("message", (message) => {
       if (typeof message.data == "string") {
-        const data = JSON.parse(message.data)
-        if (data.info && data.info.currentTime) {
-          const currentTime = data.info.currentTime
-          const currentAction = data.info.playerState
-          if (previousAction == 2 || previousAction == 3) {
-            // Ignore messages with previous actions as stop or buffering
+        try {
+          const data = JSON.parse(message.data)
+          // O evento "onReady" é emitido quando o player está pronto
+          if (data.event === "onReady") {
+            isPlayerReady.value = true
+            checkAllReady()
+          }
+          if (data.info && data.info.currentTime) {
+            const currentTime = data.info.currentTime
+            const currentAction = data.info.playerState
+            if (previousAction == 2 || previousAction == 3) {
+              previousAction = currentAction
+              return
+            }
+            if (Math.abs(previousTime - currentTime) > 1) {
+              scrollToLegend(currentTime, true)
+            } else {
+              scrollToLegend(currentTime)
+            }
+            previousTime = currentTime
             previousAction = currentAction
-            return
           }
-          if (Math.abs(previousTime - currentTime) > 1) {
-            // Jump to near timestamp transcription text
-            scrollToLegend(currentTime, true)
-          } else {
-            // Jump to transcription with same timestamp as currentTime
-            scrollToLegend(currentTime)
-          }
-          previousTime = currentTime
-          previousAction = currentAction
+        } catch (e) {
+          // Ignora erros de parse JSON
         }
       }
     })
 
-    // After load mediaElement, set listening
     mediaElement.value.addEventListener("load", () => {
       mediaElement.value.contentWindow.postMessage(
         JSON.stringify({ event: "listening" }),
@@ -78,7 +88,20 @@ const setMediaEventListeners = (scrollToLegend: Function) => {
   }
 }
 
-// TODO: consider spotify type and interactions
+// Função para verificar se tudo está pronto e emitir o evento
+const checkAllReady = () => {
+  // Se não tiver transcrição ou vídeo, emite direto
+  if (!props.data.transcription && !props.data.media_url) {
+    emit('videoReady')
+    return
+  }
+
+  // Se tiver tudo pronto, emite o evento
+  if (isPlayerReady.value && isTranscriptionReady.value) {
+    emit('videoReady')
+  }
+}
+
 const transcriptionClick = (timestamp: number | string) => {
   if (
     ["mp4", "mkv", "mp3", "ogg", "bitchute"].includes(
@@ -100,11 +123,11 @@ const transcriptionClick = (timestamp: number | string) => {
 }
 
 const downloadTranscription = () => {
-  console.log("Realizar ação de download mídia")
+  console.error("Not implemented: Download transcription")
 }
 
 const downloadText = () => {
-  console.log("Realizar ação de download texto")
+  console.error("Not implemented: Download text")
 }
 </script>
 
@@ -216,4 +239,3 @@ const downloadText = () => {
     />
   </section>
 </template>
-

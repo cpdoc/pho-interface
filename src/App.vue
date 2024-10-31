@@ -44,6 +44,10 @@ async function handleSelectionChange(value: string | null) {
   }
 }
 
+function handleVideoReady() {
+  loading.value = false
+}
+
 onMounted(loadIndex)
 
 watch(selected, handleSelectionChange)
@@ -67,6 +71,7 @@ watch(selected, handleSelectionChange)
         v-if="selected && interviewData"
         :data="interviewData"
         :key="selected"
+        @video-ready="handleVideoReady"
       />
     </n-spin>
   </section>
