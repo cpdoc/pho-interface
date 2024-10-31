@@ -1,45 +1,47 @@
 # CPDOC Interface
 
-This is the project CPDOC Interface developed with Vue 3 in Vite.
+Esse projeto contempla a interface estática que exibe as entrevistas do PHO/CPDOC.
 
-## Project Setup
+Para que a interface funcione corretamente, você precisa primeiro gerar os dados com o script
+`pho/pho_create_jsons.py`, que está no repositório
+[cpdoc/data-science-research](https://github.com/cpdoc/data-science-research). Será gerada uma pasta
+`data/pho-interface-data`, que deve ser movida para `public/data` nesse repositório.
 
-Requires docker and docker compose. On the first time, just run:
+
+## Configuração do Projeto
+
+Requer docker e docker compose. Na primeira vez, basta executar:
 
 ```shell
 make first
 ```
 
-To access project with Hot-Reload, go to [localhost:5173](http://localhost:5173).
-
-Next runs you will just need:
+Para acessar o projeto com *hot-reload* (recarregamento automático), acesse [localhost:5173](http://localhost:5173).
+Nas próximas execuções você só precisará:
 
 ```shell
 make start
 ```
 
-### Type-Check, Compile and Minify for Production
+### Verificação de Tipos, Compilação e Minificação para Produção
 
 ```shell
 make bundle
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Linting com [ESLint](https://eslint.org/)
 
 ```shell
-# Enter container shell
+# Entre no shell do container
 make shell
-
-# Then run inside the container
+# Então execute dentro do container
 npm run lint
 ```
 
-### Prettier with [Prettier](https://prettier.io/)
-
+### Formatação com [Prettier](https://prettier.io/)
 ```sh
-# Enter container shell
+# Entre no shell do container
 make shell
-
-# Then run inside the container
+# Então execute dentro do container
 npm run format
 ```
