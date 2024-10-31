@@ -1,29 +1,7 @@
 export interface InterviewIndex {
   [key: string]: {
     uuid: string;
-    published_at: string;
-    file_size: number | null;
-    corpus: {
-      id: number;
-      name: string;
-      description: string;
-      url: string;
-    };
-    language: string;
-    summary: string;
-    thumbnail_url: string;
-    title: string;
-    url: string;
-    media_url: string;
-    duration: string;
-    views: string;
-    likes: string;
-    shares: string | null;
-    comments: string;
-    description: string;
-    type: 'video' | 'audio' | 'text';
-    source: string;
-    transcription?: string;
+    label: string;
   }
 }
 
