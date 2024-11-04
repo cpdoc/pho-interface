@@ -13,7 +13,7 @@ const loading = ref(false)
 
 async function loadIndex() {
   try {
-    const response = await fetch('/data/index.json')
+    const response = await fetch('data/index.json')
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }

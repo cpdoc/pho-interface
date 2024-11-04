@@ -34,7 +34,7 @@ export interface InterviewData {
 
 export async function loadInterviewData(uuid: string): Promise<InterviewData> {
   try {
-    const response = await fetch(`/data/${uuid}.json`);
+    const response = await fetch(`data/${uuid}.json`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
